@@ -40,4 +40,21 @@ public class LyricsUtil {
 
         return wordCount;
     }
+
+    static Map<String, Double> computeNormalizedWordCount(String text) {
+        Map<String, Integer> wordCount = computeWordCount(text);
+
+        Integer total = 0;
+        for (Map.Entry<String, Integer> entry : wordCount.entrySet()) {
+            total += entry.getValue();
+        }
+
+        Map<String, Double> normalizedWordCount = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : wordCount.entrySet()) {
+            Integer count = entry.getValue();
+            normalizedWordCount.put(entry.getKey(), new Double(count) / new Double(total));
+        }
+
+        return normalizedWordCount; 
+    }
 }
