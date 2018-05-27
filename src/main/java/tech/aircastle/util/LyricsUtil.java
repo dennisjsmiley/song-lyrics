@@ -19,7 +19,7 @@ public class LyricsUtil {
 
     public static List<String> tokenize(String text) {
         Pattern pattern = Pattern.compile("\\w+");
-        Matcher matcher = pattern.matcher(text);
+        Matcher matcher = pattern.matcher(text.toLowerCase());
 
         List<String> tokens = new ArrayList<>();
         while (matcher.find()) {

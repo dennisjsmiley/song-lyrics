@@ -14,7 +14,7 @@ public class LyricsUtilTests {
     @Test
     public void testTokenize() {
         String text = "Word1 Word2 Word3";
-        assertEquals(Arrays.asList("Word1", "Word2", "Word3"), LyricsUtil.tokenize(text));
+        assertEquals(Arrays.asList("word1", "word2", "word3"), LyricsUtil.tokenize(text));
     }
 
     @Test
@@ -22,9 +22,9 @@ public class LyricsUtilTests {
         String text = "Word1 Word2 Word3";
 
         Map<String, Integer> expectedResult = new HashMap<>();
-        expectedResult.put("Word1", 1);
-        expectedResult.put("Word2", 1);
-        expectedResult.put("Word3", 1);
+        expectedResult.put("word1", 1);
+        expectedResult.put("word2", 1);
+        expectedResult.put("word3", 1);
 
         assertEquals(expectedResult, LyricsUtil.computeWordCount(text));
     }
@@ -34,10 +34,10 @@ public class LyricsUtilTests {
         String text = "Word1 Word2 Word3 Word4";
 
         Map<String, Double> expectedResult = new HashMap<>();
-        expectedResult.put("Word1", 0.25);
-        expectedResult.put("Word2", 0.25);
-        expectedResult.put("Word3", 0.25);
-        expectedResult.put("Word4", 0.25);
+        expectedResult.put("word1", 0.25);
+        expectedResult.put("word2", 0.25);
+        expectedResult.put("word3", 0.25);
+        expectedResult.put("word4", 0.25);
 
         assertEquals(expectedResult, LyricsUtil.computeNormalizedWordCount(text));
     }
