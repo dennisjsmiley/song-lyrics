@@ -2,6 +2,7 @@ package tech.aircastle.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -13,6 +14,7 @@ public class Song extends AbstractBaseEntity {
 
     private String name;
 
+    @Column(columnDefinition = "TEXT")
     private String lyrics;
 
     @JsonIgnore
