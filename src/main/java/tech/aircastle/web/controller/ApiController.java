@@ -15,14 +15,14 @@ import java.util.*;
  * Created by djsmiley on 5/27/18.
  */
 @RestController
-public class MainController {
+public class ApiController {
 
     private ArtistRepository artistRepository;
 
     private SongRepository songRepository;
 
     @Autowired
-    public MainController(ArtistRepository artistRepository, SongRepository songRepository) {
+    public ApiController(ArtistRepository artistRepository, SongRepository songRepository) {
         this.artistRepository = artistRepository;
         this.songRepository = songRepository;
     }
