@@ -81,6 +81,18 @@ public class ApiController {
         }
     }
 
+    @RequestMapping(value = "/songs/{songId}/tokens", method = RequestMethod.GET)
+    public ResponseEntity<List<String>> tokenizedSong(@PathVariable String songId) {
+        Optional<Song> result = songRepository.findById(songId);
+        if (result.isPresent()) {
+            Song song = result.get();
+            List<String> tokens = LyricsUtil.tokenize(song.getLyrics());
+            return new ResponseEntity<>(tokens, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @RequestMapping(value = "/songs/{songId}/wordCount", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Integer>> computeSongWordCount(@PathVariable String songId) {
         Optional<Song> result = songRepository.findById(songId);
