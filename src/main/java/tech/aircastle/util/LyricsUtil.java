@@ -17,7 +17,7 @@ public class LyricsUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(LyricsUtil.class);
 
-    static List<String> tokenize(String text) {
+    public static List<String> tokenize(String text) {
         Pattern pattern = Pattern.compile("\\w+");
         Matcher matcher = pattern.matcher(text);
 
@@ -29,7 +29,7 @@ public class LyricsUtil {
         return tokens;
     }
 
-    static Map<String, Integer> computeWordCount(String text) {
+    public static Map<String, Integer> computeWordCount(String text) {
         List<String> tokens = tokenize(text);
 
         Map<String, Integer> wordCount = new HashMap<>();
@@ -41,7 +41,7 @@ public class LyricsUtil {
         return wordCount;
     }
 
-    static Map<String, Double> computeNormalizedWordCount(String text) {
+    public static Map<String, Double> computeNormalizedWordCount(String text) {
         Map<String, Integer> wordCount = computeWordCount(text);
 
         Integer total = 0;

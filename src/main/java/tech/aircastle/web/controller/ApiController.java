@@ -8,6 +8,7 @@ import tech.aircastle.domain.Artist;
 import tech.aircastle.domain.Song;
 import tech.aircastle.repository.ArtistRepository;
 import tech.aircastle.repository.SongRepository;
+import tech.aircastle.util.LyricsUtil;
 
 import java.util.*;
 
@@ -75,6 +76,30 @@ public class ApiController {
         Optional<Song> result = songRepository.findById(songId);
         if (result.isPresent()) {
             return new ResponseEntity<>(result.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/songs/{songId}/wordCount", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, Integer>> computeSongWordCount(@PathVariable String songId) {
+        Optional<Song> result = songRepository.findById(songId);
+        if (result.isPresent()) {
+            Song song = result.get();
+            Map<String, Integer> wordCount = LyricsUtil.computeWordCount(song.getLyrics());
+            return new ResponseEntity<>(wordCount, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/songs/{songId}/normalizedWordCount", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, Double>> computeSongNormalizedWordCount(@PathVariable String songId) {
+        Optional<Song> result = songRepository.findById(songId);
+        if (result.isPresent()) {
+            Song song = result.get();
+            Map<String, Double> wordCount = LyricsUtil.computeNormalizedWordCount(song.getLyrics());
+            return new ResponseEntity<>(wordCount, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
