@@ -81,6 +81,17 @@ public class ApiController {
         }
     }
 
+    @RequestMapping(value = "/songs/{songId}/artist", method = RequestMethod.GET)
+    public ResponseEntity<Artist> findArtistBySong(@PathVariable String songId) {
+        Optional<Song> result = songRepository.findById(songId);
+        if (result.isPresent()) {
+            Song song = result.get();
+            return new ResponseEntity<>(song.getArtist(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @RequestMapping(value = "/songs/{songId}/tokens", method = RequestMethod.GET)
     public ResponseEntity<List<String>> tokenizedSong(@PathVariable String songId) {
         Optional<Song> result = songRepository.findById(songId);
