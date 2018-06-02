@@ -86,4 +86,32 @@ public class WordTransitionCounterTests {
         assertEquals(expected, actual);
 
     }
+
+    @Test
+    public void testGetNormalizedCount() {
+        WordTransitionCounter wordTransitionCounter = new WordTransitionCounter();
+
+        Double expected = 0.0;
+        Double actual = wordTransitionCounter.getNormalizedCount("first", "second");
+        assertEquals(expected, actual);
+
+        wordTransitionCounter.observe("first", "second");
+
+        expected = 1.0;
+        actual = wordTransitionCounter.getNormalizedCount("first", "second");
+        assertEquals(expected, actual);
+
+        wordTransitionCounter.observe("first", "third");
+
+        expected = 0.5;
+        actual = wordTransitionCounter.getNormalizedCount("first", "second");
+        assertEquals(expected, actual);
+
+        wordTransitionCounter.observe("first", "fourth");
+        wordTransitionCounter.observe("first", "fifth");
+
+        expected = 0.25;
+        actual = wordTransitionCounter.getNormalizedCount("first", "second");
+        assertEquals(expected, actual);
+    }
 }

@@ -35,6 +35,21 @@ public class WordTransitionCounter {
         return countMap.getOrDefault(second, 0);
     }
 
+    public Double getNormalizedCount(String first, String second) {
+        Map<String, Integer> countMap = wordCount.get(first);
+        if (countMap != null) {
+            Integer count = countMap.get(second);
+            if (count != null) {
+                Integer total = 0;
+                for (Map.Entry<String, Integer> entry : countMap.entrySet()) {
+                    total += entry.getValue();
+                }
+                return new Double(count) / new Double(total);
+            }
+        }
+        return 0.0;
+    }
+
     @Override
     public String toString() {
         ObjectMapper mapper = new ObjectMapper();
