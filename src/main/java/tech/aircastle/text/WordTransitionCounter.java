@@ -2,7 +2,9 @@ package tech.aircastle.text;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -74,6 +76,21 @@ public class WordTransitionCounter {
         }
 
         return normalizedWordTransitionCount;
+    }
+
+    List<String> getWordHistogram(String word) {
+        Map<String, Integer> countMap = wordCount.get(word);
+        if (countMap != null) {
+            List<String> histogram = new ArrayList<>();
+            for (String key : countMap.keySet()) {
+                Integer count = countMap.get(key);
+                for (int i = 0; i < count; i++) {
+                    histogram.add(key);
+                }
+            }
+            return histogram;
+        }
+        return null;
     }
 
     @Override

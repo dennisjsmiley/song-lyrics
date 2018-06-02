@@ -3,6 +3,7 @@ package tech.aircastle.text;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -164,5 +165,29 @@ public class WordTransitionCounterTests {
         wordTransitionCount.put("fourth", anotherCountMap);
 
         assertEquals(wordTransitionCount, counter.getNormalizedWordTransitionCount());
+    }
+
+    @Test
+    public void testGetWordHistogram() throws Exception {
+        WordTransitionCounter counter = new WordTransitionCounter();
+
+        counter.observe("first", "second");
+        counter.observe("first", "second");
+        counter.observe("first", "third");
+
+        Map<String, Map<String, Integer>> wordTransitionCount = counter.getWordTransitionCount();
+        Map<String, Integer> countMap = wordTransitionCount.get("first");
+
+        List<String> histogram = counter.getWordHistogram("first");
+
+        for (Map.Entry<String, Integer> entry : countMap.entrySet()) {
+            Integer matches = 0;
+            for (String word : histogram) {
+                if (entry.getKey().equals(word)) {
+                    matches ++;
+                }
+            }
+            assertEquals(entry.getValue(), matches);
+        }
     }
 }
