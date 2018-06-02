@@ -142,6 +142,19 @@ public class ApiController {
         }
     }
 
+    @RequestMapping(value = "/songs/{songId}/normalizedWordTransitionCount", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, Map<String, Double>>> computeNormalizedWordTransitionCount(@PathVariable String songId) {
+        Optional<Song> result = songRepository.findById(songId);
+        if (result.isPresent()) {
+            Song song = result.get();
+            Map<String, Map<String, Double>> normalizedWordTransitionCount = LyricsUtil.computeNormalizedWordTransitionCount(song.getLyrics());
+
+            return new ResponseEntity<>(normalizedWordTransitionCount, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @RequestMapping(value = "/artists/{artistId}/songs", method = RequestMethod.GET)
     public ResponseEntity<List<Song>> findSongsByArtist(@PathVariable String artistId) {
         Optional<Artist> result = artistRepository.findById(artistId);

@@ -73,4 +73,18 @@ public class LyricsUtil {
 
         return wordTransitionCounter.getWordTransitionCount();
     }
+
+    public static Map<String, Map<String, Double>> computeNormalizedWordTransitionCount(String text) {
+        WordTransitionCounter counter = new WordTransitionCounter();
+
+        List<String> tokens = tokenize(text);
+
+        for (int i = 1; i < tokens.size(); i++) {
+            String prev = tokens.get(i - 1);
+            String curr = tokens.get(i);
+            counter.observe(prev, curr);
+        }
+
+        return counter.getNormalizedWordTransitionCount();
+    }
 }

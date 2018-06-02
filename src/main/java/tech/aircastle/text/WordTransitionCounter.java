@@ -54,6 +54,28 @@ public class WordTransitionCounter {
         return new HashMap<>(wordCount);
     }
 
+    public Map<String, Map<String, Double>> getNormalizedWordTransitionCount() {
+        Map<String, Map<String, Double>> normalizedWordTransitionCount = new HashMap<>();
+
+        for (String first : wordCount.keySet()) {
+            Map<String, Integer> countMap = wordCount.get(first);
+
+            Integer total = 0;
+            for (Map.Entry<String, Integer> entry : countMap.entrySet()) {
+                total += entry.getValue();
+            }
+
+            Map<String, Double> normalizedCountMap = new HashMap<>();
+            for (Map.Entry<String, Integer> entry : countMap.entrySet()) {
+                normalizedCountMap.put(entry.getKey(), new Double(entry.getValue()) / new Double(total));
+            }
+
+            normalizedWordTransitionCount.put(first, normalizedCountMap);
+        }
+
+        return normalizedWordTransitionCount;
+    }
+
     @Override
     public String toString() {
         ObjectMapper mapper = new ObjectMapper();
