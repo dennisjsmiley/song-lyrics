@@ -140,4 +140,29 @@ public class WordTransitionCounterTests {
 
         assertEquals(wordTransitionCount, counter.getWordTransitionCount());
     }
+
+    @Test
+    public void testGetNormalizedWordTransitionCount() throws Exception {
+        WordTransitionCounter counter = new WordTransitionCounter();
+
+        counter.observe("first", "second");
+        counter.observe("first", "second");
+        counter.observe("first", "second");
+        counter.observe("first", "third");
+        counter.observe("fourth", "fifth");
+        counter.observe("fourth", "sixth");
+
+        Map<String, Map<String, Double>> wordTransitionCount = new HashMap<>();
+        Map<String, Double> countMap = new HashMap<>();
+        countMap.put("second", 0.75);
+        countMap.put("third", 0.25);
+        wordTransitionCount.put("first", countMap);
+
+        Map<String, Double> anotherCountMap = new HashMap<>();
+        anotherCountMap.put("fifth", 0.5);
+        anotherCountMap.put("sixth", 0.5);
+        wordTransitionCount.put("fourth", anotherCountMap);
+
+        assertEquals(wordTransitionCount, counter.getNormalizedWordTransitionCount());
+    }
 }
