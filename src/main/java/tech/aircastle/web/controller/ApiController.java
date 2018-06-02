@@ -130,13 +130,13 @@ public class ApiController {
     }
 
     @RequestMapping(value = "/songs/{songId}/wordTransitionCount", method = RequestMethod.GET)
-    public ResponseEntity<String> computeWordTransitionCount(@PathVariable String songId) {
+    public ResponseEntity<Map<String, Map<String, Integer>>> computeWordTransitionCount(@PathVariable String songId) {
         Optional<Song> result = songRepository.findById(songId);
         if (result.isPresent()) {
             Song song = result.get();
-            WordTransitionCounter wordTransitionCounter = LyricsUtil.computeWordTransitionCount(song.getLyrics());
+            Map<String, Map<String, Integer>> wordTransitionCount = LyricsUtil.computeWordTransitionCount(song.getLyrics());
 
-            return new ResponseEntity<>(wordTransitionCounter.toString(), HttpStatus.OK);
+            return new ResponseEntity<>(wordTransitionCount, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

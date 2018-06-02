@@ -50,6 +50,10 @@ public class WordTransitionCounter {
         return 0.0;
     }
 
+    public Map<String, Map<String, Integer>> getWordTransitionCount() {
+        return new HashMap<>(wordCount);
+    }
+
     @Override
     public String toString() {
         ObjectMapper mapper = new ObjectMapper();
