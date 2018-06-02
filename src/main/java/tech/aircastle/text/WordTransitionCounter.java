@@ -8,11 +8,11 @@ import java.util.Map;
 /**
  * Created by djsmiley on 6/2/18.
  */
-public class WordCounter {
+public class WordTransitionCounter {
 
     private final Map<String, Map<String, Integer>> wordCount = new HashMap<>();
 
-    public void addCount(String first, String second) {
+    public void observe(String first, String second) {
         Map<String, Integer> countMap = wordCount.get(first);
         if (countMap != null) {
             Integer count = countMap.get(second);

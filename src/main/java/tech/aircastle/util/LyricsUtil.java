@@ -2,7 +2,7 @@ package tech.aircastle.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tech.aircastle.text.WordCounter;
+import tech.aircastle.text.WordTransitionCounter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,8 +59,8 @@ public class LyricsUtil {
         return normalizedWordCount; 
     }
 
-    public static WordCounter computeWordTransitionCount(String text) {
-        WordCounter wordCounter = new WordCounter();
+    public static WordTransitionCounter computeWordTransitionCount(String text) {
+        WordTransitionCounter wordTransitionCounter = new WordTransitionCounter();
 
         List<String> tokens = tokenize(text);
 
@@ -68,9 +68,9 @@ public class LyricsUtil {
             String prev = tokens.get(i - 1);
             String curr = tokens.get(i);
 
-            wordCounter.addCount(prev, curr);
+            wordTransitionCounter.observe(prev, curr);
         }
 
-        return wordCounter;
+        return wordTransitionCounter;
     }
 }
