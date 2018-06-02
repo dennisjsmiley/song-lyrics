@@ -2,6 +2,9 @@ package tech.aircastle.text;
 
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -113,5 +116,28 @@ public class WordTransitionCounterTests {
         expected = 0.25;
         actual = wordTransitionCounter.getNormalizedCount("first", "second");
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGetWordTransitionCount() throws Exception {
+        WordTransitionCounter counter = new WordTransitionCounter();
+
+        counter.observe("first", "second");
+        counter.observe("first", "second");
+        counter.observe("first", "second");
+        counter.observe("first", "third");
+        counter.observe("fourth", "fifth");
+
+        Map<String, Map<String, Integer>> wordTransitionCount = new HashMap<>();
+        Map<String, Integer> countMap = new HashMap<>();
+        countMap.put("second", 3);
+        countMap.put("third", 1);
+        wordTransitionCount.put("first", countMap);
+
+        Map<String, Integer> anotherCountMap = new HashMap<>();
+        anotherCountMap.put("fifth", 1);
+        wordTransitionCount.put("fourth", anotherCountMap);
+
+        assertEquals(wordTransitionCount, counter.getWordTransitionCount());
     }
 }
