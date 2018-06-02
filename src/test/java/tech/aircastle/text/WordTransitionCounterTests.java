@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Created by djsmiley on 6/2/18.
@@ -189,5 +190,17 @@ public class WordTransitionCounterTests {
             }
             assertEquals(entry.getValue(), matches);
         }
+    }
+
+    @Test
+    public void testGetNextWord() throws Exception {
+        WordTransitionCounter counter = new WordTransitionCounter();
+
+        counter.observe("first", "second");
+        counter.observe("third", "fourth");
+
+        assertEquals("second", counter.getNextWord("first"));
+        assertEquals("fourth", counter.getNextWord("third"));
+        assertNull(counter.getNextWord("missingWord"));
     }
 }

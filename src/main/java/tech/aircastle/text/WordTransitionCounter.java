@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by djsmiley on 6/2/18.
@@ -76,6 +77,15 @@ public class WordTransitionCounter {
         }
 
         return normalizedWordTransitionCount;
+    }
+
+    String getNextWord(String word) {
+        List<String> histogram = getWordHistogram(word);
+        if (histogram != null) {
+            int index = ThreadLocalRandom.current().nextInt(0, histogram.size());
+            return histogram.get(index);
+        }
+        return null;
     }
 
     List<String> getWordHistogram(String word) {
