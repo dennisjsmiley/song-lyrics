@@ -1,5 +1,7 @@
 package tech.aircastle.text;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,5 +33,15 @@ public class WordCounter {
     public Integer getCount(String first, String second) {
         Map<String, Integer> countMap = wordCount.getOrDefault(first, new HashMap<>());
         return countMap.getOrDefault(second, 0);
+    }
+
+    @Override
+    public String toString() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(wordCount);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

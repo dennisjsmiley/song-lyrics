@@ -8,6 +8,7 @@ import tech.aircastle.domain.Artist;
 import tech.aircastle.domain.Song;
 import tech.aircastle.repository.ArtistRepository;
 import tech.aircastle.repository.SongRepository;
+import tech.aircastle.text.WordCounter;
 import tech.aircastle.util.LyricsUtil;
 
 import java.util.*;
@@ -123,6 +124,19 @@ public class ApiController {
             Song song = result.get();
             Map<String, Double> wordCount = LyricsUtil.computeNormalizedWordCount(song.getLyrics());
             return new ResponseEntity<>(wordCount, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/songs/{songId}/wordTransitionCount", method = RequestMethod.GET)
+    public ResponseEntity<String> computeWordTransitionCount(@PathVariable String songId) {
+        Optional<Song> result = songRepository.findById(songId);
+        if (result.isPresent()) {
+            Song song = result.get();
+            WordCounter wordCounter = LyricsUtil.computeWordTransitionCount(song.getLyrics());
+
+            return new ResponseEntity<>(wordCounter.toString(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
