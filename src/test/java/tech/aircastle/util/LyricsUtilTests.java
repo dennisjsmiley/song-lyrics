@@ -41,4 +41,38 @@ public class LyricsUtilTests {
 
         assertEquals(expectedResult, LyricsUtil.computeNormalizedWordCount(text));
     }
+
+    @Test
+    public void testComputeWordTransitionCount() throws Exception {
+        Map<String, Map<String, Integer>> wordTransitionCount = new HashMap<>();
+
+        String text = "word1 word2 word3";
+
+        Map<String, Integer> countMap1 = new HashMap<>();
+        countMap1.put("word2", 1);
+        wordTransitionCount.put("word1", countMap1);
+
+        Map<String, Integer> countMap2 = new HashMap<>();
+        countMap2.put("word3", 1);
+        wordTransitionCount.put("word2", countMap2);
+
+        assertEquals(wordTransitionCount, LyricsUtil.computeWordTransitionCount(text));
+    }
+
+    @Test
+    public void testComputeNormalizedWordTransitionCount() throws Exception {
+        Map<String, Map<String, Double>> wordTransitionCount = new HashMap<>();
+
+        String text = "word1 word2 word3";
+
+        Map<String, Double> countMap1 = new HashMap<>();
+        countMap1.put("word2", 1.0);
+        wordTransitionCount.put("word1", countMap1);
+
+        Map<String, Double> countMap2 = new HashMap<>();
+        countMap2.put("word3", 1.0);
+        wordTransitionCount.put("word2", countMap2);
+
+        assertEquals(wordTransitionCount, LyricsUtil.computeNormalizedWordTransitionCount(text));
+    }
 }
