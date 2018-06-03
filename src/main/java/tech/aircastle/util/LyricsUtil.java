@@ -89,8 +89,9 @@ public class LyricsUtil {
     }
 
     public static List<String> getWordList(String text, String startWord, int length) {
-        List<String> wordList = new ArrayList<>();
-        wordList.add(startWord);
+        if (length < 1) {
+            return new ArrayList<>();
+        }
 
         WordTransitionCounter counter = new WordTransitionCounter();
 
@@ -101,6 +102,9 @@ public class LyricsUtil {
             String curr = tokens.get(i);
             counter.observe(prev, curr);
         }
+
+        List<String> wordList = new ArrayList<>();
+        wordList.add(startWord);
 
         for (int i = 0; i < length - 1; i++) {
             String nextWord = counter.getNextWord(startWord);

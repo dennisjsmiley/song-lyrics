@@ -83,6 +83,12 @@ public class LyricsUtilTests {
 
         assertEquals(list, LyricsUtil.getWordList(text, "this", list.size()));
 
-        assertEquals(Arrays.asList("this"), LyricsUtil.getWordList(text, "this", 0));
+        assertEquals(list, LyricsUtil.getWordList(text, "this", list.size() + 1));
+
+        assertEquals(new ArrayList<>(), LyricsUtil.getWordList(text, "this", 0));
+
+        assertEquals(Arrays.asList("this"), LyricsUtil.getWordList(text, "this", 1));
+
+        assertEquals(Arrays.asList("this", "is"), LyricsUtil.getWordList(text, "this", 2));
     }
 }
