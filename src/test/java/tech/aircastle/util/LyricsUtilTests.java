@@ -82,5 +82,7 @@ public class LyricsUtilTests {
         String text = String.join(" ", list);
 
         assertEquals(list, LyricsUtil.getWordList(text, "this", list.size()));
+
+        assertEquals(Arrays.asList("this"), LyricsUtil.getWordList(text, "this", 0));
     }
 }
