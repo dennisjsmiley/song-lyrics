@@ -102,7 +102,7 @@ public class LyricsUtil {
             counter.observe(prev, curr);
         }
 
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < length - 1; i++) {
             String nextWord = counter.getNextWord(startWord);
             if (nextWord != null) {
                 wordList.add(nextWord);
