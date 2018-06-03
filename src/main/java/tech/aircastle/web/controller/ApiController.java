@@ -157,13 +157,15 @@ public class ApiController {
 
     @RequestMapping(value = "/songs/{songId}/wordMarkovModel", method = RequestMethod.GET)
     public ResponseEntity<List<String>> computeWordMarkovModel(@PathVariable String songId,
-                                                               @RequestParam("startWord") String startWord,
-                                                               @RequestParam("length") Integer length) {
+                                                               @RequestParam(value = "startWord", required = false) String startWord,
+                                                               @RequestParam(value = "length") Integer length) {
         Optional<Song> result = songRepository.findById(songId);
         if (result.isPresent()) {
             Song song = result.get();
 
-            List<String> wordList = LyricsUtil.getWordList(song.getLyrics(), startWord, length);
+            List<String> wordList = (startWord != null) ?
+                    LyricsUtil.getWordList(song.getLyrics(), startWord, length) :
+                    LyricsUtil.getWordList(song.getLyrics(), length);
 
             return new ResponseEntity<>(wordList, HttpStatus.OK);
         } else {
