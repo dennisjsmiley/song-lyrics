@@ -79,7 +79,7 @@ public class WordTransitionCounter {
         return normalizedWordTransitionCount;
     }
 
-    String getNextWord(String word) {
+    public String getNextWord(String word) {
         List<String> histogram = getWordHistogram(word);
         if (histogram != null) {
             int index = ThreadLocalRandom.current().nextInt(0, histogram.size());

@@ -155,6 +155,22 @@ public class ApiController {
         }
     }
 
+    @RequestMapping(value = "/songs/{songId}/wordMarkovModel", method = RequestMethod.GET)
+    public ResponseEntity<List<String>> computeWordMarkovModel(@PathVariable String songId,
+                                                               @RequestParam("startWord") String startWord,
+                                                               @RequestParam("length") Integer length) {
+        Optional<Song> result = songRepository.findById(songId);
+        if (result.isPresent()) {
+            Song song = result.get();
+
+            List<String> wordList = LyricsUtil.getWordList(song.getLyrics(), startWord, length);
+
+            return new ResponseEntity<>(wordList, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @RequestMapping(value = "/artists/{artistId}/songs", method = RequestMethod.GET)
     public ResponseEntity<List<Song>> findSongsByArtist(@PathVariable String artistId) {
         Optional<Artist> result = artistRepository.findById(artistId);
