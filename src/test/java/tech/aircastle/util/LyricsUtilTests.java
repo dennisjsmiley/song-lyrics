@@ -75,4 +75,12 @@ public class LyricsUtilTests {
 
         assertEquals(wordTransitionCount, LyricsUtil.computeNormalizedWordTransitionCount(text));
     }
+
+    @Test
+    public void testGetWordList() throws Exception {
+        List<String> list = Arrays.asList("this", "is", "the", "only", "list", "produced");
+        String text = String.join(" ", list);
+
+        assertEquals(list, LyricsUtil.getWordList(text, "this", list.size()));
+    }
 }
