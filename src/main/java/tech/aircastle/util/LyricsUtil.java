@@ -61,51 +61,44 @@ public class LyricsUtil {
     }
 
     public static Map<String, Map<String, Integer>> computeWordTransitionCount(String text) {
-        WordTransitionCounter wordTransitionCounter = new WordTransitionCounter();
-
         List<String> tokens = tokenize(text);
 
-        for (int i = 1; i < tokens.size(); i++) {
-            String prev = tokens.get(i - 1);
-            String curr = tokens.get(i);
-
-            wordTransitionCounter.observe(prev, curr);
-        }
+        WordTransitionCounter wordTransitionCounter = getTrainedWordTransitionCounter(tokens);
 
         return wordTransitionCounter.getWordTransitionCount();
     }
 
     public static Map<String, Map<String, Double>> computeNormalizedWordTransitionCount(String text) {
-        WordTransitionCounter counter = new WordTransitionCounter();
-
         List<String> tokens = tokenize(text);
 
-        for (int i = 1; i < tokens.size(); i++) {
-            String prev = tokens.get(i - 1);
-            String curr = tokens.get(i);
-            counter.observe(prev, curr);
-        }
+        WordTransitionCounter counter = getTrainedWordTransitionCounter(tokens);
 
         return counter.getNormalizedWordTransitionCount();
     }
 
     public static List<String> getWordList(String text, int length) {
-        if (length < 1) {
-            return new ArrayList<>();
-        }
-
-        WordTransitionCounter counter = new WordTransitionCounter();
-
         List<String> tokens = tokenize(text);
 
-        for (int i = 1; i < tokens.size(); i++) {
-            String prev = tokens.get(i - 1);
-            String curr = tokens.get(i);
-            counter.observe(prev, curr);
-        }
+        WordTransitionCounter counter = getTrainedWordTransitionCounter(tokens);
 
         int startWordIndex = ThreadLocalRandom.current().nextInt(0, tokens.size());
         String startWord = tokens.get(startWordIndex);
+
+        return getWordList(counter, startWord, length);
+    }
+
+    public static List<String> getWordList(String text, String startWord, int length) {
+        List<String> tokens = tokenize(text);
+
+        WordTransitionCounter counter = getTrainedWordTransitionCounter(tokens);
+
+        return getWordList(counter, startWord, length);
+    }
+
+    private static List<String> getWordList(WordTransitionCounter counter, String startWord, int length) {
+        if (length < 1) {
+            return new ArrayList<>();
+        }
 
         List<String> wordList = new ArrayList<>();
         wordList.add(startWord);
@@ -123,14 +116,8 @@ public class LyricsUtil {
         return wordList;
     }
 
-    public static List<String> getWordList(String text, String startWord, int length) {
-        if (length < 1) {
-            return new ArrayList<>();
-        }
-
+    private static WordTransitionCounter getTrainedWordTransitionCounter(List<String> tokens) {
         WordTransitionCounter counter = new WordTransitionCounter();
-
-        List<String> tokens = tokenize(text);
 
         for (int i = 1; i < tokens.size(); i++) {
             String prev = tokens.get(i - 1);
@@ -138,19 +125,6 @@ public class LyricsUtil {
             counter.observe(prev, curr);
         }
 
-        List<String> wordList = new ArrayList<>();
-        wordList.add(startWord);
-
-        for (int i = 0; i < length - 1; i++) {
-            String nextWord = counter.getNextWord(startWord);
-            if (nextWord != null) {
-                wordList.add(nextWord);
-                startWord = nextWord;
-            } else {
-                break;
-            }
-        }
-
-        return wordList;
+        return counter;
     }
 }
