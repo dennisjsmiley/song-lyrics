@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import tech.aircastle.domain.Artist;
 import tech.aircastle.domain.Song;
 import tech.aircastle.repository.ArtistRepository;
-import tech.aircastle.repository.SongRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +14,13 @@ import java.util.Optional;
 public class ArtistServiceImpl implements ArtistService {
 
     private ArtistRepository artistRepository;
-    private SongRepository songRepository;
+
+    private SongService songService;
 
     @Autowired
-    public ArtistServiceImpl(ArtistRepository artistRepository, SongRepository songRepository) {
+    public ArtistServiceImpl(ArtistRepository artistRepository, SongService songService) {
         this.artistRepository = artistRepository;
-        this.songRepository = songRepository;
+        this.songService = songService;
     }
 
     @Override
@@ -46,12 +46,12 @@ public class ArtistServiceImpl implements ArtistService {
     public boolean addArtistSong(String artistId, String songId) {
         Optional<Artist> artistResult = artistRepository.findById(artistId);
         if (artistResult.isPresent()) {
-            Optional<Song> songResult = songRepository.findById(songId);
+            Artist artist = artistResult.get();
+            Optional<Song> songResult = songService.findById(songId);
             if (songResult.isPresent()) {
-                Artist artist = artistResult.get();
                 Song song = songResult.get();
                 song.setArtist(artist);
-                songRepository.save(song);
+                songService.save(song);
                 return true;
             } else {
                 return false;

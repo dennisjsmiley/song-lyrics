@@ -6,11 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.aircastle.domain.Artist;
 import tech.aircastle.domain.Song;
-import tech.aircastle.repository.ArtistRepository;
-import tech.aircastle.repository.SongRepository;
 import tech.aircastle.service.ArtistService;
 import tech.aircastle.service.SongService;
-import tech.aircastle.text.WordTransitionCounter;
 import tech.aircastle.util.LyricsUtil;
 
 import java.util.*;
@@ -31,6 +28,14 @@ public class ApiController {
         this.songService = songService;
     }
 
+    private <T> ResponseEntity<T> getResponseEntity(Optional<T> opt) {
+        if (opt.isPresent()) {
+            return new ResponseEntity<>(opt.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @RequestMapping(value = "/artists", method = RequestMethod.GET)
     public List<Artist> findAllArtists() {
         return artistService.findAll();
@@ -45,11 +50,7 @@ public class ApiController {
     @RequestMapping(value = "/artists/{artistId}", method = RequestMethod.GET)
     public ResponseEntity<Artist> findArtistById(@PathVariable String artistId) {
         Optional<Artist> result = artistService.findById(artistId);
-        if (result.isPresent()) {
-            return new ResponseEntity<>(result.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return getResponseEntity(result);
     }
 
     @RequestMapping(value = "/songs", method = RequestMethod.GET)
@@ -66,11 +67,7 @@ public class ApiController {
     @RequestMapping(value = "/songs/{songId}", method = RequestMethod.GET)
     public ResponseEntity<Song> findSongById(@PathVariable String songId) {
         Optional<Song> result = songService.findById(songId);
-        if (result.isPresent()) {
-            return new ResponseEntity<>(result.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return getResponseEntity(result);
     }
 
     @RequestMapping(value = "/songs/{songId}/artist", method = RequestMethod.GET)
@@ -86,82 +83,40 @@ public class ApiController {
 
     @RequestMapping(value = "/songs/{songId}/tokens", method = RequestMethod.GET)
     public ResponseEntity<List<String>> tokenizedSong(@PathVariable String songId) {
-        Optional<Song> result = songService.findById(songId);
-        if (result.isPresent()) {
-            Song song = result.get();
-            List<String> tokens = LyricsUtil.tokenize(song.getLyrics());
-            return new ResponseEntity<>(tokens, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Optional<List<String>> result = songService.tokenize(songId);
+        return getResponseEntity(result);
     }
 
     @RequestMapping(value = "/songs/{songId}/wordCount", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Integer>> computeSongWordCount(@PathVariable String songId) {
-        Optional<Song> result = songService.findById(songId);
-        if (result.isPresent()) {
-            Song song = result.get();
-            Map<String, Integer> wordCount = LyricsUtil.computeWordCount(song.getLyrics());
-            return new ResponseEntity<>(wordCount, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Optional<Map<String, Integer>> result = songService.computeWordCount(songId);
+        return getResponseEntity(result);
     }
 
     @RequestMapping(value = "/songs/{songId}/normalizedWordCount", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Double>> computeSongNormalizedWordCount(@PathVariable String songId) {
-        Optional<Song> result = songService.findById(songId);
-        if (result.isPresent()) {
-            Song song = result.get();
-            Map<String, Double> wordCount = LyricsUtil.computeNormalizedWordCount(song.getLyrics());
-            return new ResponseEntity<>(wordCount, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Optional<Map<String, Double>> result = songService.computeNormailzedWordCount(songId);
+        return getResponseEntity(result);
     }
 
     @RequestMapping(value = "/songs/{songId}/wordTransitionCount", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Map<String, Integer>>> computeWordTransitionCount(@PathVariable String songId) {
-        Optional<Song> result = songService.findById(songId);
-        if (result.isPresent()) {
-            Song song = result.get();
-            Map<String, Map<String, Integer>> wordTransitionCount = LyricsUtil.computeWordTransitionCount(song.getLyrics());
-
-            return new ResponseEntity<>(wordTransitionCount, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Optional<Map<String, Map<String, Integer>>> result = songService.computeWordTransitionCount(songId);
+        return getResponseEntity(result);
     }
 
     @RequestMapping(value = "/songs/{songId}/normalizedWordTransitionCount", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Map<String, Double>>> computeNormalizedWordTransitionCount(@PathVariable String songId) {
-        Optional<Song> result = songService.findById(songId);
-        if (result.isPresent()) {
-            Song song = result.get();
-            Map<String, Map<String, Double>> normalizedWordTransitionCount = LyricsUtil.computeNormalizedWordTransitionCount(song.getLyrics());
-
-            return new ResponseEntity<>(normalizedWordTransitionCount, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Optional<Map<String, Map<String, Double>>> result = songService.computeNormalizedWordTransitionCount(songId);
+        return getResponseEntity(result);
     }
 
     @RequestMapping(value = "/songs/{songId}/wordMarkovModel", method = RequestMethod.GET)
     public ResponseEntity<List<String>> computeWordMarkovModel(@PathVariable String songId,
                                                                @RequestParam(value = "startWord", required = false) String startWord,
                                                                @RequestParam(value = "length") Integer length) {
-        Optional<Song> result = songService.findById(songId);
-        if (result.isPresent()) {
-            Song song = result.get();
-
-            List<String> wordList = (startWord != null) ?
-                    LyricsUtil.getWordList(song.getLyrics(), startWord, length) :
-                    LyricsUtil.getWordList(song.getLyrics(), length);
-
-            return new ResponseEntity<>(wordList, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Optional<List<String>> result = songService.computeWordMarkovModel(songId, startWord, length);
+        return getResponseEntity(result);
     }
 
     @RequestMapping(value = "/artists/{artistId}/songs", method = RequestMethod.GET)
