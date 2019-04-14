@@ -4,7 +4,7 @@ This project creates song lyrics using a Markov Model trained on the word transi
 
 Step 0) Run the application. Be sure to set your MySQL connection settings in `src/main/resources/application.properties`. 
 ```
-mvn spring-boot:run
+mvn clean spring-boot:run
 ```
 
 Step 1) Add a "seed" song.
