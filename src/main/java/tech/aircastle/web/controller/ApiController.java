@@ -22,7 +22,6 @@ public class ApiController {
 
     private SongService songService;
 
-    @Autowired
     public ApiController(ArtistService artistService, SongService songService) {
         this.artistService = artistService;
         this.songService = songService;

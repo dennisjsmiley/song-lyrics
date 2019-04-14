@@ -17,7 +17,6 @@ public class ArtistServiceImpl implements ArtistService {
 
     private SongService songService;
 
-    @Autowired
     public ArtistServiceImpl(ArtistRepository artistRepository, SongService songService) {
         this.artistRepository = artistRepository;
         this.songService = songService;

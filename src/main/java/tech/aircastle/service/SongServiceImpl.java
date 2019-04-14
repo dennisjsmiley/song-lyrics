@@ -17,7 +17,6 @@ public class SongServiceImpl implements SongService {
 
     private SongRepository songRepository;
 
-    @Autowired
     public SongServiceImpl(SongRepository songRepository) {
         this.songRepository = songRepository;
     }
